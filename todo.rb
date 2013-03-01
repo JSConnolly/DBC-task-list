@@ -1,8 +1,8 @@
 require_relative 'list'
 
 class TaskMaster
-  def initialize(commands)
-    @command = commands[0]
+  def initialize(ARGV)
+    @command = ARGV[0]
     run(@commands)
   end
 
