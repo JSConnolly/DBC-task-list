@@ -1,7 +1,9 @@
 class Task
-  attr_reader :id,:content, :complete
+  attr_reader :content, :complete
+  attr_accessor :id
 
-  def initialize(id, content, complete = false)
+
+  def initialize(id, content)
     @id = id
     @content = content
     @complete = false
@@ -17,14 +19,10 @@ class List
     convert_file
   end
 
-  def convert_file #not property of List
-    TodoParser.each_entry('todo.txt') do |entry|
-      @tasks << Task.new(entry["id"],entry["description"])
-    end
-  end
-
   def delete(arg)
     @tasks.delete_if {|task| task.id == arg }
+    num = arg.to_i - 1
+    refresh_list(num)
   end
 
   def complete(arg)
@@ -37,24 +35,25 @@ class List
   end
 
   def add(arg)
-    Task.new("DUMMY ID", arg)
-
+    task = arg.join(" ")
+    id = @tasks.length + 1
+    @tasks << Task.new(id, task)
   end
 
-  def save
-  File.open(file_name, 'w') do |file|
-    @list.tasks.each do |task|
-      "#{task.id}. #{task.content}"
-      end
+  private
+  def convert_file #not property of List class?
+    TodoParser.each_entry('todo.txt') do |entry|
+      @tasks << Task.new(entry["id"],entry["description"])
     end
   end
 
-
-  # def to_s
-  #   @tasks.each do |task|
-  #     puts "#{task.id}:  #{task.content}\n"
-  #   end
-  # end
+  def refresh_list(num)
+    @tasks.each do |task|
+      if task.id.to_i > num 
+        task.id = ((eval task.id) - 1).to_s 
+      end
+    end
+  end
 end
 
 class TodoParser
@@ -70,8 +69,3 @@ class TodoParser
     Hash[match.names.zip(match.captures)]
   end
 end
-
-# a = List.new
-# a.convert_file
-# a.delete("2")
-# p a
