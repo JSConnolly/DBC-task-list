@@ -1,13 +1,11 @@
 class Task
   attr_reader :id,:content, :complete
 
-  @@unique_id == 0
-
-  def initialize(id, content, complete)
-    @unique_id = @@unique_id
+  def initialize(id, content, complete = false)
     @id = id
     @content = content
     @complete = false
+    @file_name = 'todo.txt'
   end
 end
 
@@ -16,6 +14,7 @@ class List
 
   def initialize
     @tasks = []
+    convert_file
   end
 
   def convert_file #not property of List
@@ -38,10 +37,18 @@ class List
   end
 
   def add(arg)
-    task = arg.join
-    Task.new()
+    Task.new("DUMMY ID", arg)
 
   end
+
+  def save
+  File.open(file_name, 'w') do |file|
+    @list.tasks.each do |task|
+      "#{task.id}. #{task.content}"
+      end
+    end
+  end
+
 
   # def to_s
   #   @tasks.each do |task|
@@ -64,7 +71,7 @@ class TodoParser
   end
 end
 
-a = List.new
-a.convert_file
-a.delete("2")
-p a
+# a = List.new
+# a.convert_file
+# a.delete("2")
+# p a

@@ -1,7 +1,8 @@
-require_relative 'list'
+require_relative 'tasksandlist'
 
 class TaskMaster
   def initialize()
+    raise "Please enter a command after the filename to run this script" unless ARGV.length > 0
     @command = ARGV[0]
     @list = List.new()
     run(@commands)
@@ -35,19 +36,20 @@ class TaskMaster
       raise "Must add something..." unless ARGV.length > 1
       task_to_add = ""
       ARGV.shift
-      ARGV.each do |arg|
-       task_to_add += "#{arg} "
-      end
-      @list.add(task_to_add)
+      @list.add(ARGV.join(" "))
+
+      # ARGV.each do |arg|
+      #  task_to_add += "#{arg} "
+      # end
+      # @list.add(task_to_add)
     else
       puts "I can't do that, Dave"
     end
   end
   
   
+  
 end
 
 
 TaskMaster.new()
-
-class 
