@@ -1,6 +1,5 @@
 class Task
-  attr_reader :content, :complete
-  attr_accessor :id
+  attr_accessor :id, :complete, :content
 
 
   def initialize(id, content)
@@ -29,15 +28,23 @@ class List
     @tasks.each do |task|
       if task.id == arg
         task.complete = true
+        task.content = "DONE: #{task.content}"
       end
-      task.content = "DONE: {#task.content}"
     end
   end
 
-  def add(arg)
-    task = arg.join(" ")
+  def add(task)
+    # task = arg.join(" ")
     id = @tasks.length + 1
     @tasks << Task.new(id, task)
+  end
+
+  def save
+    File.open('todo.txt', 'w') do |file|
+      @tasks.map do |task|
+          file << "#{task.id}. #{task.content}\n"
+        end
+      end
   end
 
   private

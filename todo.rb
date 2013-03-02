@@ -18,20 +18,21 @@ class TaskMaster
       end
     when "delete"
       raise "Must delete by task ID (number)" unless /\d+/.match(ARGV[1])
-      puts "Are you sure you want to delete #{ARGV[1]}? (y/n)"
-      input = gets.chomp
-      if input == "y"
+      # input = ""
+      # puts "Are you sure you want to delete #{ARGV[1]}? (y/n)"
+      # input = gets.chomp
+      # if input == "y"
         puts "# of tasks before delete: #{@list.tasks.length}"
         @list.delete(ARGV[1])
         "So accomplished!"
         puts "# of tasks after delete: #{@list.tasks.length}"
-      else
-        puts "Aborting delete..."
-        EXIT
-      end
+      # else
+      #   puts "Aborting delete..."
+      #   EXIT
+      # end
     when "complete"
-      raise "Must complete by task ID (integer)" unless ARGV[1].is_a?(Integer)
-      list.complete(ARGV[1])
+      # raise "Must complete by task ID (integer)" unless ARGV[1].is_a?(Integer)
+      @list.complete(ARGV[1])
     when "add"
       raise "Must add something..." unless ARGV.length > 1
       task_to_add = ""
@@ -45,9 +46,11 @@ class TaskMaster
     else
       puts "I can't do that, Dave"
     end
+
+    @list.save
   end
   
-  
+  # 
   
 end
 
