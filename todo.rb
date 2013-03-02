@@ -16,7 +16,7 @@ class TaskMaster
         puts "#{task.id}: #{task.content}"
       end
     when "delete"
-      raise "Must delete by task ID (integer)" unless ARGV[1].is_a?(Integer)
+      raise "Must delete by task ID (number)" unless /\d+/.match(ARGV[1])
       puts "Are you sure you want to delete #{ARGV[1]}? (y/n)"
       input = gets.chomp
       if input == "y"
