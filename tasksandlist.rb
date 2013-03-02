@@ -1,9 +1,13 @@
 class Task
   attr_reader :id,:content, :complete
 
-  def initialize(id, content)
+  @@unique_id == 0
+
+  def initialize(id, content, complete)
+    @unique_id = @@unique_id
     @id = id
     @content = content
+    @complete = false
   end
 end
 
@@ -16,24 +20,34 @@ class List
 
   def convert_file #not property of List
     TodoParser.each_entry('todo.txt') do |entry|
-      @tasks << Task.new(entry["id"],entry["description"])# {|idtag, id, contenttag, content|  }
+      @tasks << Task.new(entry["id"],entry["description"])
     end
   end
 
-  def all_items
-    p @tasks
-  end
-
   def delete(arg)
-    @tasks.delete_if {|task| task[id] == arg }
+    @tasks.delete_if {|task| task.id == arg }
   end
 
   def complete(arg)
-    # will mark line # (arg) in the list as complete
+    @tasks.each do |task|
+      if task.id == arg
+        task.complete = true
+      end
+      task.content = "DONE: {#task.content}"
+    end
   end
 
   def add(arg)
+    task = arg.join
+    Task.new()
+
   end
+
+  # def to_s
+  #   @tasks.each do |task|
+  #     puts "#{task.id}:  #{task.content}\n"
+  #   end
+  # end
 end
 
 class TodoParser
@@ -52,7 +66,5 @@ end
 
 a = List.new
 a.convert_file
-a.delete(2)
+a.delete("2")
 p a
-
-
